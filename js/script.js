@@ -111,22 +111,13 @@ const createMessageBox = () => {
 
 //func for search box, create new array, loop through students and if matches are found add them to new array, then pass new arr into our funcs to display results
 const search = () => {
-  const newLis = [];
+  let newLis = [];
+  let stuStr = '';
   const input = document.querySelector('input');
   const nameToSearch = input.value;
   const mBox = document.querySelector('.message-box');
-
-  if(nameToSearch === ''){
-    showPage(1, studentsList);
-    appendPageLinks(studentsList,1);
-    mBox.style.display = 'none';
-  } else{
-    for(let i = 0; i < studentsList.length; i++){
-      let studentName = studentsList[i].firstElementChild.querySelector('h3').innerHTML;
-      if(studentName === nameToSearch){
-        newLis.push(studentsList[i]);
-      }
-    }
+  //func to be called when our new list is ready, will append new buttons and display students if needed, otherwise display the messagebox
+  const showAndLinks = () => {
     //if array is empty show 0 results and display messagebox, else show results
     if(newLis.length === 0){
       mBox.style.display = '';
@@ -138,6 +129,32 @@ const search = () => {
       mBox.style.display = 'none';
     }
   }
+  //if no name is searched return all results and ensure messagebox display is set to none
+  if(nameToSearch === ''){
+    showPage(1, studentsList);
+    appendPageLinks(studentsList,1);
+    mBox.style.display = 'none';
+  } else{
+    //loop through list and then loop through h3 str, compare them together and then push to new array if matched
+    for(let i = 0; i < studentsList.length; i++){
+      let studentName = studentsList[i].firstElementChild.querySelector('h3').innerHTML;
+      stuStr = '';
+
+      for(let x = 0; x < nameToSearch.length; x++){
+        if(studentName[x] === nameToSearch[x]){
+          stuStr += studentName[x];
+        }
+      }
+      if(stuStr === nameToSearch && stuStr!== ''){
+        let li = studentsList[i];
+        li.classList.add('searched');
+        newLis.push(li);
+        stuStr = '';
+      }
+      }
+      //call func to show search results
+      showAndLinks();
+      }
 }
 //Called to init page
 initPage();
@@ -145,6 +162,17 @@ initPage();
 //Event Listener for clicks on div
 div.addEventListener('click', (event) => {
   const studentsList = document.getElementsByClassName('student-item');
+  let arrayToPass = [];
+  //loop through list to see if our search func has been called, by checking the class, if so we only want to display searched items
+  for(let i = 0; i < studentsList.length; i++){
+    if(studentsList[i].className === 'student-item cf searched'){
+      arrayToPass.push(studentsList[i]);
+    }
+  }
+  //if search was not called length will be zero so we will just want to show all students
+  if(arrayToPass.length === 0) {
+    arrayToPass = studentsList;
+  }
   //declare const for what was clicked
   const linkClicked = event.target;
   //Only run code if the click event was on a link we created
@@ -160,7 +188,7 @@ div.addEventListener('click', (event) => {
     //grab textcontent of link that was clicked
     const pageNumber = linkClicked.textContent;
     //use parseint to convert pagenumber to integer, then pass as argument to showpage func
-    showPage(parseInt(pageNumber), studentsList);
+    showPage(parseInt(pageNumber), arrayToPass);
   }
 });
 
