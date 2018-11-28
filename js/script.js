@@ -129,11 +129,14 @@ const search = () => {
       mBox.style.display = 'none';
     }
   }
-  //if no name is searched return all results and ensure messagebox display is set to none
+  //if no name is searched return all results and ensure messagebox display is set to none, also remove search class 
   if(nameToSearch === ''){
     showPage(1, studentsList);
     appendPageLinks(studentsList,1);
     mBox.style.display = 'none';
+    for(let i = 0; i < studentsList.length; i++){
+      studentsList[i].className = 'student-item cf'
+    }
   } else{
     //loop through list and then loop through h3 str, compare them together and then push to new array if matched
     for(let i = 0; i < studentsList.length; i++){
