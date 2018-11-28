@@ -94,12 +94,22 @@ body{
     padding: 0;
     border-bottom: none;
   }
+.message-box{
+  text-align: center;
+  width: 30%;
+  padding: 20px 20px;
+  background-color: #e1f1f6;
+  border: solid 0.5px #e1f1f6;
+  border-radius: 10px;
+  margin: auto;
+  color: #555;
+}
 
 .pagination{
   margin: 40px 0 0 0;
   text-align: center;
 }
- 
+
   .pagination li{
     display: inline;
   }
